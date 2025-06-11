@@ -8,13 +8,17 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.example.livetv.Channel
 
-
 class ChannelPresenter<T> : Presenter() {
+
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val cardView = ImageCardView(parent.context).apply {
+        val context = parent.context
+
+        val cardView = ImageCardView(context).apply {
             isFocusable = true
             isFocusableInTouchMode = true
+            setMainImageDimensions(313, 176) // largura x altura padrão dos cards
         }
+
         return ViewHolder(cardView)
     }
 
@@ -23,8 +27,7 @@ class ChannelPresenter<T> : Presenter() {
         val cardView = viewHolder.view as ImageCardView
 
         cardView.titleText = channel.name
-        cardView.setMainImageDimensions(300, 200)
-
+        cardView.contentText = channel.category
         Glide.with(cardView.context)
             .load(channel.thumbnailUrl)
             .centerCrop()
@@ -32,6 +35,7 @@ class ChannelPresenter<T> : Presenter() {
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        // Liberação de recursos se necessário
+        val cardView = viewHolder.view as ImageCardView
+        cardView.mainImage = null
     }
 }
