@@ -1,6 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.LiveTV" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@android:color/black</item>
-    </style>
+<resources>
+
+    <style name="Theme.LiveTV" parent="Theme.AppCompat.DayNight.NoActionBar" />
 </resources>

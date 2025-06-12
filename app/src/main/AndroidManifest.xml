@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LiveTV">
         <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
 
