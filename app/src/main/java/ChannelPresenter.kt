@@ -1,12 +1,10 @@
-package com.example.livetv.ui.presenter
+package com.skysinc.tvplus.ui.presenter
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.ViewGroup
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.example.livetv.Channel
+import com.skysinc.tvplus.Channel
 
 class ChannelPresenter<T> : Presenter() {
 

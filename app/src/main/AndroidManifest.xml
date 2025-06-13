@@ -17,10 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LiveTV">
         <activity
-            android:name=".PlayerActivity"
+            android:name="com.skysinc.tvplus.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name="com.skysinc.tvplus.HomeActivity"
             android:exported="false" />
 
         <meta-data
@@ -28,10 +28,10 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="com.skysinc.tvplus.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.skysinc.tvplus.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.skysinc.tvplus.MainActivity"
             android:exported="true" />
     </application>
 

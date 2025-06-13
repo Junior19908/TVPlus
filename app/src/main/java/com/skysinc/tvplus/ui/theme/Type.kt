@@ -1,4 +1,4 @@
-package com.example.livetv.ui.theme
+package com.skysinc.tvplus.ui.theme
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily

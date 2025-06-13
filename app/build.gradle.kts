@@ -6,11 +6,11 @@ plugins {
 
 
 android {
-    namespace = "com.example.livetv"
+    namespace = "com.skysinc.tvplus"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.livetv"
+        applicationId = "com.skysinc.tvplus"
         minSdk = 21
         targetSdk = 35
         versionCode = 1
@@ -70,4 +70,5 @@ dependencies {
     implementation ("androidx.media3:media3-common:1.7.1")
     implementation ("androidx.media3:media3-exoplayer:1.7.1")
     implementation ("androidx.media3:media3-exoplayer-hls:1.7.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
 }
