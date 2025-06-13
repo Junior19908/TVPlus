@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "769473365934",
+    "project_id": "cinemaemcasa-50eab",
+    "storage_bucket": "cinemaemcasa-50eab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769473365934:android:d578415ab2254a8077ea3f",
+        "android_client_info": {
+          "package_name": "com.skysinc.tvplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHFNiDfvWOMzQdgqLNuXYAqIEYxcZY9H4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

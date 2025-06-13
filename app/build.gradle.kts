@@ -71,4 +71,6 @@ dependencies {
     implementation ("androidx.media3:media3-exoplayer:1.7.1")
     implementation ("androidx.media3:media3-exoplayer-hls:1.7.1")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
+    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }
