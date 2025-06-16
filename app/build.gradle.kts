@@ -1,7 +1,8 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.application) // Keep this one (using version catalog alias)
+    alias(libs.plugins.kotlin.android)      // Keep this one (using version catalog alias)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")    // Keep one of these
 }
 
 
@@ -56,6 +57,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.mediation.test.suite)
     implementation(libs.androidx.leanback)
+    implementation(libs.firebase.firestore)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
@@ -73,4 +75,5 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
 }

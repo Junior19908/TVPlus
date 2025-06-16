@@ -3,6 +3,7 @@ package com.skysinc.tvplus
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,13 +40,15 @@ class LoginActivity : AppCompatActivity() {
     private fun validarChaveNoFirebase(codigo: String, errorText: TextView) {
         val db = Firebase.firestore
 
-        val docRef = db.collection("licencas").document(codigo)
+        db.collection("licencas")
+            .whereEqualTo("chave", codigo)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val doc = querySnapshot.documents[0] // Pega o primeiro resultado
 
-        docRef.get()
-            .addOnSuccessListener { doc ->
-                if (doc.exists()) {
                     val ativo = doc.getBoolean("ativo") ?: false
-                    val dataExp = doc.getString("dataExpiracao")
+                    val dataExp = doc.getTimestamp("dataExpiracao")?.toDate()
 
                     if (!ativo) {
                         errorText.text = "Licença desativada."
@@ -52,8 +56,7 @@ class LoginActivity : AppCompatActivity() {
                         return@addOnSuccessListener
                     }
 
-                    if (dataExp != null && isDataValida(dataExp)) {
-
+                    if (dataExp != null && dataExp.after(Date())) {
                         val prefs = getSharedPreferences("TVPlusPrefs", MODE_PRIVATE)
                         prefs.edit().putLong("login_time", System.currentTimeMillis()).apply()
 
@@ -72,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "Erro ao verificar licença.", Toast.LENGTH_LONG).show()
             }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
