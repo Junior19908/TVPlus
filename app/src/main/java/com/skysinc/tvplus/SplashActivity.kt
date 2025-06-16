@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
             finish()
-        }, 2000) // Delay de 2 segundos para splash
+        }, 2000)
     }
 
     private fun isLoginValid(): Boolean {

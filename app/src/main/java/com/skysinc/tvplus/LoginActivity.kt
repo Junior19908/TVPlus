@@ -3,6 +3,7 @@ package com.skysinc.tvplus
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -11,13 +12,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseApp
-import com.skysinc.tvplus.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -39,16 +37,20 @@ class LoginActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun validarChaveNoFirebase(codigo: String, errorText: TextView) {
         val db = Firebase.firestore
+        val currentDeviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
         db.collection("licencas")
             .whereEqualTo("chave", codigo)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    val doc = querySnapshot.documents[0] // Pega o primeiro resultado
+                    val doc = querySnapshot.documents[0]
+                    val docRef = doc.reference
 
                     val ativo = doc.getBoolean("ativo") ?: false
                     val dataExp = doc.getTimestamp("dataExpiracao")?.toDate()
+                    val registeredDeviceId = doc.getString("deviceId")
+                    val dataAtivacao = doc.getString("dataAtivacao")
 
                     if (!ativo) {
                         errorText.text = "Licença desativada."
@@ -56,17 +58,37 @@ class LoginActivity : AppCompatActivity() {
                         return@addOnSuccessListener
                     }
 
-                    if (dataExp != null && dataExp.after(Date())) {
-                        val prefs = getSharedPreferences("TVPlusPrefs", MODE_PRIVATE)
-                        prefs.edit().putLong("login_time", System.currentTimeMillis()).apply()
-
-                        startActivity(Intent(this, HomeActivity::class.java))
-                        finish()
-                    } else {
+                    if (dataExp == null || dataExp.before(Date())) {
                         errorText.text = "Licença expirada."
                         errorText.visibility = View.VISIBLE
+                        return@addOnSuccessListener
                     }
 
+                    // Primeira ativação
+                    if (registeredDeviceId.isNullOrEmpty()) {
+                        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                        val nowFormatted = sdf.format(Date())
+
+                        docRef.update(
+                            mapOf(
+                                "deviceId" to currentDeviceId,
+                                "dataAtivacao" to nowFormatted
+                            )
+                        ).addOnSuccessListener {
+                            salvarLoginLocalEEntrar()
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "Erro ao salvar ativação.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    // Dispositivo autorizado
+                    else if (registeredDeviceId == currentDeviceId) {
+                        salvarLoginLocalEEntrar()
+                    }
+                    // Tentativa de outro dispositivo
+                    else {
+                        errorText.text = "Chave já usada em outro dispositivo."
+                        errorText.visibility = View.VISIBLE
+                    }
                 } else {
                     errorText.text = "Chave não encontrada."
                     errorText.visibility = View.VISIBLE
@@ -74,18 +96,15 @@ class LoginActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Erro ao verificar licença.", Toast.LENGTH_LONG).show()
+                Log.e("LOGIN_FIREBASE", "Falha: ${it.message}", it)
             }
-
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun isDataValida(data: String): Boolean {
-        return try {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            val dataLicenca = LocalDate.parse(data, formatter)
-            dataLicenca.isAfter(LocalDate.now())
-        } catch (e: Exception) {
-            false
-        }
+    private fun salvarLoginLocalEEntrar() {
+        val prefs = getSharedPreferences("TVPlusPrefs", MODE_PRIVATE)
+        prefs.edit().putLong("login_time", System.currentTimeMillis()).apply()
+
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
     }
 }

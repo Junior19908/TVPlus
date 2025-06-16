@@ -1,4 +1,3 @@
-`markdown
 # TVPlus - Aplicativo de Streaming de TV Ao Vivo (Android)
 
 Bem-vindo ao TVPlus, um aplicativo Android para assistir canais de TV ao vivo via streaming. Este projeto foi desenvolvido como um exemplo de aplicativo de IPTV para a plataforma Android, com foco em aprendizado e demonstração de funcionalidades comuns em aplicativos de mídia.
