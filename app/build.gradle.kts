@@ -14,9 +14,8 @@ android {
         applicationId = "com.skysinc.tvplus"
         minSdk = 21
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = 6
+        versionName = "1.0.6"
     }
 
     buildTypes {
@@ -76,4 +75,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation ("androidx.media3:media3-datasource:1.7.1")
+    implementation ("androidx.media3:media3-datasource-okhttp:1.7.1")
+    implementation ("org.nanohttpd:nanohttpd:2.3.1")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 }

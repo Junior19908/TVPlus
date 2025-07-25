@@ -75,14 +75,14 @@ class LoginActivity : AppCompatActivity() {
                                 "dataAtivacao" to nowFormatted
                             )
                         ).addOnSuccessListener {
-                            salvarLoginLocalEEntrar()
+                            salvarLoginLocalEEntrar(codigo, dataExp)
                         }.addOnFailureListener {
                             Toast.makeText(this, "Erro ao salvar ativação.", Toast.LENGTH_SHORT).show()
                         }
                     }
                     // Dispositivo autorizado
                     else if (registeredDeviceId == currentDeviceId) {
-                        salvarLoginLocalEEntrar()
+                        salvarLoginLocalEEntrar(codigo, dataExp)
                     }
                     // Tentativa de outro dispositivo
                     else {
@@ -100,9 +100,18 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun salvarLoginLocalEEntrar() {
+    /**
+     * Salva a chave de licença e a data de expiração no SharedPreferences.
+     */
+    private fun salvarLoginLocalEEntrar(licenseKey: String, dataExpiracao: Date?) {
         val prefs = getSharedPreferences("TVPlusPrefs", MODE_PRIVATE)
-        prefs.edit().putLong("login_time", System.currentTimeMillis()).apply()
+        val editor = prefs.edit()
+
+        editor.putString("license_key", licenseKey)
+        editor.putLong("login_time", System.currentTimeMillis())
+        dataExpiracao?.let { editor.putLong("license_expiration", it.time) }
+
+        editor.apply()
 
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
